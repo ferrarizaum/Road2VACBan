@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Road2VACBan
+{
+    public class Offsets
+    {
+        // offsets.cs
+        public static int dwViewAngles = 0x1A933C0;
+        public static int dwLocalPlayerPawn = 0x1874050;
+        public static int dwEntityList = 0x1A1F730;
+
+        // client.dll.cs
+        public static int m_hPlayerPawn = 0x814;
+        public static int m_iHealth = 0x344;
+        public static int m_vOldOrigin = 0x1324;
+        public static int m_iTeamNum = 0x3E3;
+        public static int m_vecViewOffset = 0xCB0;
+        public static int m_lifeState = 0x348;
+
+        // triggerbot
+        public static int m_iIDEntIndex = 0x1458;
+    }
+}
