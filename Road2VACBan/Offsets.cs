@@ -12,6 +12,7 @@ namespace Road2VACBan
         public static int dwViewAngles = 0x1A933C0;
         public static int dwLocalPlayerPawn = 0x1874050;
         public static int dwEntityList = 0x1A1F730;
+        public static int dwViewMatrix = 0x1A89130;
 
         // client.dll.cs
         public static int m_hPlayerPawn = 0x814;
