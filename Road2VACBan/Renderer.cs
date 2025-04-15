@@ -8,8 +8,6 @@ namespace sauronsring
     public class Renderer : Overlay
     {
         // checkbox value
-        public bool aimbot = true;
-        public bool aimOnTeam = false;
         public Vector2 screenSize = new Vector2(1920, 1080);
         private ConcurrentQueue<Entity> entities = new ConcurrentQueue<Entity>();
         private Entity localPlayer = new Entity();
@@ -24,10 +22,6 @@ namespace sauronsring
         protected override void Render()
         {
             ImGui.Begin("Menu");
-
-            ImGui.Checkbox("aimbot", ref aimbot);
-
-            ImGui.Checkbox("aim on teammates, aswell", ref aimOnTeam);
 
             ImGui.Checkbox("Enable ESP", ref enableESP);
 
@@ -48,6 +42,8 @@ namespace sauronsring
                 {
                     if (EntityOnScreen(entity))
                     {
+                        Console.WriteLine(entity.health);
+                        DrawHealthBar(entity);  
                         DrawBox(entity);
                         DrawLine(entity);
                     }
@@ -69,6 +65,28 @@ namespace sauronsring
             return false;
             */
             return true;
+        }
+
+        private void DrawHealthBar(Entity entity)
+        {
+            // calculate bar height
+            float entityHeight = entity.position2D.Y - entity.viewPosition2D.Y;
+            // get box location
+            float boxLeft = entity.viewPosition2D.X - entityHeight / 3;
+            float boxRight = entity.position2D.X + entityHeight / 3;
+            // calculate bar width
+            float barPercentWidth = 0.05f; // 5% percent width
+            float barPixelWidth = barPercentWidth * (boxRight - boxLeft);
+            float barHeight = entityHeight * (entity.health / 100f);
+
+            //calculate bar rectangle, two vectors
+            Vector2 barTop = new Vector2(boxLeft - barPixelWidth, entity.position2D.Y - barHeight);
+            Vector2 barBottom = new Vector2(boxLeft, entity.position2D.Y);
+
+            Vector4 barColor = new Vector4(0, 1, 0, 1);
+
+            // draw health bar
+            drawList.AddRectFilled(barTop, barBottom, ImGui.ColorConvertFloat4ToU32(barColor));
         }
 
         private void DrawBox(Entity entity)

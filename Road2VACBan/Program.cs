@@ -18,8 +18,6 @@ Entity localPlayer = new Entity(); // our entity
 
 // const int HOTKEY = 0x06;
 
-// aimbot loop
-
 while (true)
 {
     entities.Clear();
@@ -72,16 +70,13 @@ while (true)
 
         if (lifeState != 256)
             continue;
-        /*
-        if (team == localPlayer.team && !renderer.aimOnTeam)
-            continue;
-        */
 
         float[] viewMatrix = swed.ReadMatrix(client + Offsets.dwViewMatrix);
 
         Entity entity = new Entity();
 
         entity.team = swed.ReadInt(currentPawn, Offsets.m_iTeamNum);
+        entity.health = swed.ReadInt(currentPawn, Offsets.m_iHealth);
         entity.position = swed.ReadVec(currentPawn, Offsets.m_vOldOrigin);
         entity.viewOffset = swed.ReadVec(currentPawn, Offsets.m_vecViewOffset);
         entity.position2D = Calculate.WorldToScreen(viewMatrix, entity.position, screenSize);
