@@ -14,8 +14,13 @@ namespace sauronsring
         private readonly object entityLock = new object();
 
         private bool enableESP = true;
+        public bool enablename = true;
         private Vector4 enemyColor = new Vector4(1,0,0,1); // default red
         private Vector4 teamColor = new Vector4(0, 1, 0, 1); // default green
+        private Vector4 boneColor = new Vector4(1, 1, 1, 1);
+        private Vector4 nameColor = new Vector4(1, 1, 1, 1);
+
+        float boneThickness = 4;
 
         ImDrawListPtr drawList;
 
@@ -24,6 +29,7 @@ namespace sauronsring
             ImGui.Begin("Menu");
 
             ImGui.Checkbox("Enable ESP", ref enableESP);
+            ImGui.Checkbox("Enable name", ref enablename);
 
             // team color
             if (ImGui.CollapsingHeader("Team color"))
@@ -31,7 +37,9 @@ namespace sauronsring
             // enemy color
             if (ImGui.CollapsingHeader("Enemy color"))
                 ImGui.ColorPicker4("##enemycolor", ref enemyColor);
-
+            // bone color
+            if (ImGui.CollapsingHeader("Bone color"))
+                ImGui.ColorPicker4("##bonecolor", ref boneColor);
             DrawOverlay(screenSize);
 
             drawList = ImGui.GetWindowDrawList();
@@ -42,10 +50,11 @@ namespace sauronsring
                 {
                     if (EntityOnScreen(entity))
                     {
-                        Console.WriteLine(entity.health);
-                        DrawHealthBar(entity);  
+                        DrawBones(entity);
                         DrawBox(entity);
                         DrawLine(entity);
+                        DrawHealthBar(entity);  
+                        DrawName(entity, 20);
                     }
                 }
             }
@@ -65,6 +74,35 @@ namespace sauronsring
             return false;
             */
             return true;
+        }
+
+        private void DrawName(Entity entity, int yOffset)
+        {
+            if (enablename)
+            {
+                Vector2 textLocation = new Vector2(entity.viewPosition2D.X, entity.viewPosition2D.Y - yOffset);
+                drawList.AddText(textLocation, ImGui.ColorConvertFloat4ToU32(nameColor), $"{entity.name}");
+            }
+        }
+
+        private void DrawBones(Entity entity)
+        {
+            uint uintColor = ImGui.ColorConvertFloat4ToU32(boneColor);
+            float currentBoneThickness = boneThickness / entity.distance;
+
+            drawList.AddLine(entity.bones2d[1], entity.bones2d[2], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[1], entity.bones2d[3], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[1], entity.bones2d[6], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[3], entity.bones2d[4], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[6], entity.bones2d[7], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[4], entity.bones2d[5], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[7], entity.bones2d[8], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[1], entity.bones2d[0], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[0], entity.bones2d[9], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[0], entity.bones2d[11], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[9], entity.bones2d[10], uintColor, currentBoneThickness);
+            drawList.AddLine(entity.bones2d[11], entity.bones2d[12], uintColor, currentBoneThickness);
+            drawList.AddCircle(entity.bones2d[2], 3 + currentBoneThickness, uintColor);
         }
 
         private void DrawHealthBar(Entity entity)

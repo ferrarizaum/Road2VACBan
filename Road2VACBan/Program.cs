@@ -73,6 +73,9 @@ while (true)
 
         float[] viewMatrix = swed.ReadMatrix(client + Offsets.dwViewMatrix);
 
+        IntPtr sceneNode = swed.ReadPointer(currentPawn, Offsets.m_pGameSceneNode);
+        IntPtr boneMatrix = swed.ReadPointer(sceneNode, Offsets.m_modelState + 0x80);
+
         Entity entity = new Entity();
 
         entity.team = swed.ReadInt(currentPawn, Offsets.m_iTeamNum);
@@ -82,9 +85,14 @@ while (true)
         entity.position2D = Calculate.WorldToScreen(viewMatrix, entity.position, screenSize);
         entity.viewPosition2D = Calculate.WorldToScreen(viewMatrix,
             Vector3.Add(entity.position, entity.viewOffset), screenSize);
+        entity.distance = Vector3.Distance(entity.position, localPlayer.position);
+        entity.bones = Calculate.ReadBones(boneMatrix, swed);
+        entity.bones2d = Calculate.ReadBones2d(entity.bones, viewMatrix, screenSize);
+        entity.name = swed.ReadString(currentController, Offsets.m_iszPlayerName, 16).Split("\0")[0];
 
         entities.Add(entity);       
     }
     renderer.UpdateLocalPlayer(localPlayer);
     renderer.UpdateEntities(entities);
+    Thread.Sleep(10);
 }

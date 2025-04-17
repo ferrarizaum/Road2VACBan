@@ -18,5 +18,17 @@
 
         // triggerbot
         public static int m_iIDEntIndex = 0x1458;
+
+        // skeleton
+        public static int m_pGameSceneNode = 0x328;
+        public static int m_modelState = 0x170;
+
+        // name
+        public static int m_iszPlayerName = 0x660;
+
+        // glow
+        //public static int m_Glow = 0xC00;
+        //public static int m_bGlowing = 0x51;
+        //public static int m_glowColorOverride = 0x40;
     }
 }
