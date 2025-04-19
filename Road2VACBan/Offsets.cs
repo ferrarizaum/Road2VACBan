@@ -27,8 +27,9 @@
         public static int m_iszPlayerName = 0x660;
 
         // glow
-        //public static int m_Glow = 0xC00;
-        //public static int m_bGlowing = 0x51;
-        //public static int m_glowColorOverride = 0x40;
+        public static int m_Glow = 0xC00;
+        public static int m_bGlowing = 0x51;
+        public static int m_glowColorOverride = 0x40;
+        public static int m_iGlowType = 0x30;
     }
 }

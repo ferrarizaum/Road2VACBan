@@ -1,6 +1,9 @@
 ﻿using Swed64;
 using System.Numerics;
 using sauronsring;
+using System;
+using System.Runtime.InteropServices;
+using ImGuiNET;
 
 Swed swed = new Swed("cs2");
 
@@ -77,6 +80,31 @@ while (true)
         IntPtr boneMatrix = swed.ReadPointer(sceneNode, Offsets.m_modelState + 0x80);
 
         Entity entity = new Entity();
+
+        // Write glow enabled (uint32_t)
+        IntPtr glowTypeAddress = IntPtr.Add(currentPawn, Offsets.m_Glow + Offsets.m_iGlowType);
+        IntPtr glowColorAddress = IntPtr.Add(currentPawn, Offsets.m_Glow + Offsets.m_glowColorOverride);
+        IntPtr glowEnabledAddress = IntPtr.Add(currentPawn, Offsets.m_Glow + Offsets.m_bGlowing);
+
+        //bool success3 = Memory.WriteMemory(glowEnabledAddress, (uint)1);
+
+        // Check results
+        //Console.WriteLine($"Glow Type Write: {(success1 ? "Success" : "Failed")}");
+        //Console.WriteLine($"Glow Color Write: {(success2 ? "Success" : "Failed")}");
+        Console.WriteLine($"Glow Type Address: ${glowTypeAddress}");
+        Console.WriteLine($"Glow Color Address: ${glowColorAddress}");
+        Console.WriteLine($"Glow Enabled Address: ${glowEnabledAddress}");
+
+        // bool sucess1 = swed.WriteUInt(glowTypeAddress, 1);
+        Vector4 nameColor = new Vector4(1, 1, 1, 1);
+        bool sucess2 = swed.WriteFloat(glowColorAddress, 0xFFFF0000);
+        bool sucess3 = swed.WriteInt(glowEnabledAddress, 1);
+
+        //Console.WriteLine($"Glow Enabled Write: {(success3 ? "Success" : "Failed")}");
+        // Console.WriteLine($"Glow Type Write: {(sucess1 ? "Success" : "Failed")}");
+        Console.WriteLine($"Glow Color Write: {(sucess2 ? "Success" : "Failed")}");
+        Console.WriteLine($"Glow Enabled Write: {(sucess3 ? "Success" : "Failed")}");
+
 
         entity.team = swed.ReadInt(currentPawn, Offsets.m_iTeamNum);
         entity.health = swed.ReadInt(currentPawn, Offsets.m_iHealth);

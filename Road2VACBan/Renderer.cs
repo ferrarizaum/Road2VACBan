@@ -52,7 +52,7 @@ namespace sauronsring
                     {
                         DrawBones(entity);
                         DrawBox(entity);
-                        DrawLine(entity);
+                        // DrawLine(entity);
                         DrawHealthBar(entity);  
                         DrawName(entity, 20);
                     }
